@@ -8,7 +8,7 @@
 	const onClick = () => {
 		isRTL = !isRTL;
 	};
-	let activeTab = 5;
+	let activeTab = 13;
 	const onTabClick = (e, index) => {
 		console.log(e, index);
 	};
@@ -18,9 +18,11 @@
 			isRTL ? (body.dir = 'rtl') : (body.dir = 'ltr');
 		}
 	}
+	let goToEnd;
+	let goToStart;
 </script>
 
-<Tabs {activeTab} {onTabClick} {isRTL}>
+<Tabs {activeTab} {onTabClick} bind:goToEnd bind:goToStart {isRTL}>
 	{#each [...Array(33).keys()] as item}
 		<Tab>
 			tab {item}
@@ -28,6 +30,7 @@
 	{/each}
 </Tabs>
 
+<button on:click={() => goToEnd()}>go to end</button>
+<button on:click={() => goToStart()}>go to start</button>
+
 <button on:click={onClick}>{isRTL ? 'rtl' : 'ltr'}</button>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>

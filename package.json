@@ -1,9 +1,33 @@
 {
 	"name": "svelte-tabs-scrollable",
 	"version": "0.0.1",
+	"description": "a simple svelte scrollable tabs with a lot of additional features and with fully supporting of RTL mode",
+	"author": "Mohammed Aliwi",
+	"license": "MIT",
+	"repository": "Mohammed Aliwi/svelte-tabs-scrollable",
+	"main": "dist/index.js",
+	"module": "dist/index.modern.js",
+	"source": "src/index.js",
+	"keywords": [
+	  "svelte",
+	  "svelte-tabs",
+	  "tabs",
+	  "scrollable",
+	  "rtl",
+	  "menu",
+	  "tab",
+	  "scroll",
+	  "navigation"
+	],
+	"homepage": "https://github.com/Mood-al/svelte-tabs-scrollable#readme",
+	"bugs": {
+	  "url": "https://github.com/Mood-al/svelte-tabs-scrollable/issues",
+	  "email": "aliwi299@gmail.com"
+	},
+	"funding": "https://www.buymeacoffee.com/Mooder",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "svelte-kit sync && svelte-package",
+		"build": "svelte-kit sync",
 		"prepublishOnly": "echo 'Did you mean to publish `./package/`, instead of `./`?' && exit 1",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
