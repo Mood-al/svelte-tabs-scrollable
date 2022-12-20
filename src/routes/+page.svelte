@@ -32,5 +32,11 @@
 
 <button on:click={() => goToEnd()}>go to end</button>
 <button on:click={() => goToStart()}>go to start</button>
-
 <button on:click={onClick}>{isRTL ? 'rtl' : 'ltr'}</button>
+
+<h3>
+	I'm working now on the demo and on adding the API to the component. if you want to see demos on
+	react-tabs-scrollable please visit this <a nopo href="https://react-tabs-scrollable.vercel.app/"
+		><h2>Website</h2></a
+	> until i can finish the svelte one, they both have the same features and functionality.
+</h3>

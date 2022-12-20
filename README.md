@@ -1,38 +1,54 @@
-# create-svelte
+# usage
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+```javascript
+<script>
+	// @ts-nocheck
 
-## Creating a project
+	import Tabs from '$lib/Tabs.svelte';
+	import Tab from '$lib/Tab.svelte';
 
-If you're seeing this, you've probably already done this step. Congrats!
+	let isRTL = false;
+	const onClick = () => {
+		isRTL = !isRTL;
+	};
+	let activeTab = 13;
+	const onTabClick = (e, index) => {
+		console.log(e, index);
+	};
+	$: {
+		if (typeof window !== 'undefined') {
+			const body = window.document.body;
+			isRTL ? (body.dir = 'rtl') : (body.dir = 'ltr');
+		}
+	}
+	let goToEnd;
+	let goToStart;
+</script>
+
+<Tabs {activeTab} {onTabClick} bind:goToEnd bind:goToStart {isRTL}>
+	{#each [...Array(33).keys()] as item}
+		<Tab>
+			tab {item}
+		</Tab>
+	{/each}
+</Tabs>
+
+<button on:click={() => goToEnd()}>go to end</button>
+<button on:click={() => goToStart()}>go to start</button>
+<button on:click={onClick}>{isRTL ? 'rtl' : 'ltr'}</button>
+
+<h3>
+	I'm working now on the demo and on adding the API to the component. if you want to see demos on
+	react-tabs-scrollable please visit this <a nopo href="https://react-tabs-scrollable.vercel.app/"
+		><h2>Website</h2></a
+	> until i can finish the svelte one, they both have the same features and functionality.
+</h3>
+
+```
+
+## installation
 
 ```bash
 # create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+npm i svelte-tabs-scroll-tabs
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
