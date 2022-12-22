@@ -7,17 +7,28 @@
 	export let isRTL;
 	export let activeTab;
 	export let onTabClick;
-	export let scrollSelectedToCenterOfView = true;
-	export let scrollSelectedToEndOfView = true;
+	export let scrollSelectedToCenterOfView = false;
+	export let scrollSelectedToEndOfView = false;
 	export let tabsScrollAmount = 3;
-	export let goToStart = () => {
+	export let animationDuration = 300;
+	export let hideNavBtnsOnMobile = true;
+
+	export const goToStart = () => {
 		scroll(0);
 	};
-	export let goToEnd = () => {
+
+	export const goToEnd = () => {
 		const { tabsRects } = getTabsRects();
 		const { scrollWidth } = tabsRects;
 		scroll((isRTL ? -1 : 1) * scrollWidth);
 	};
+	export const onLeftBtnClick = () => {
+		scroll(tabsRef?.scrollLeft - tabRef?.clientWidth * tabsScrollAmount, animationDuration, true);
+	};
+	export const onRightBtnClick = () => {
+		scroll(tabsRef?.scrollLeft + tabRef?.clientWidth * tabsScrollAmount, animationDuration, true);
+	};
+
 	let tabsRef;
 	let tabRef;
 	let showNavBtns = {
@@ -25,7 +36,10 @@
 		end: false
 	};
 
-	const scroll = (scrollValue = 100, duration = 300, animation = true) => {
+	export let didReachEnd;
+	export let didReachStart;
+
+	const scroll = (scrollValue = 100, duration = animationDuration, animation = true) => {
 		if (animation) {
 			animate('scrollLeft', tabsRef, scrollValue, {
 				duration: duration || 300
@@ -35,7 +49,7 @@
 		}
 	};
 
-	const getTabsRects = (tabsEl, tabEl) => {
+	const getTabsRects = (tabsEl) => {
 		const tabsNode = tabsEl ? tabsEl : tabsRef;
 
 		let tabsRects;
@@ -59,7 +73,7 @@
 		let tabRects;
 
 		if (tabsNode) {
-			tabRects = tabEl ? tabEl.getBoundingClientRect() : tabRef.getBoundingClientRect();
+			tabRects = tabsNode?.children[activeTab].getBoundingClientRect();
 			if (!activeTab && activeTab !== 0) {
 				console.error('svelte-tabs-scrollable : You have to add activeTab prop');
 			}
@@ -75,7 +89,7 @@
 		if (!el.children) return;
 
 		tabRef = el.children[activeTab];
-		tabRef.classList.add('stc___tab___selected');
+		tabRef?.classList.add('stc___tab___selected');
 		[...el.children].forEach((tab, idx) => {
 			tab.addEventListener('click', (e) => {
 				activeTab = idx;
@@ -104,10 +118,10 @@
 
 	const onNavBtnClick = (dir) => {
 		if (dir === 'left') {
-			scroll(tabsRef?.scrollLeft - tabRef?.clientWidth * tabsScrollAmount, 300, true);
+			onLeftBtnClick();
 		}
 		if (dir === 'right') {
-			scroll(tabsRef?.scrollLeft + tabRef?.clientWidth * tabsScrollAmount, 300, true);
+			onRightBtnClick();
 		}
 	};
 
@@ -139,13 +153,13 @@
 				const nextScrollStart =
 					tabsRects.scrollLeft + (tabRects.left - tabsRects.left) - additionalScrollValue;
 
-				scroll(nextScrollStart, 300, true, tabsRef);
+				scroll(nextScrollStart, animationDuration, true, tabsRef);
 			} else if (tabRects.right > tabsRects.right) {
 				// right side of button is out of view
 				const nextScrollStart =
 					tabsRects.scrollLeft + (tabRects.right - tabsRects.right) + additionalScrollValue;
 
-				scroll(nextScrollStart, 300, true, tabsRef);
+				scroll(nextScrollStart, animationDuration, true, tabsRef);
 			}
 		}
 	};
@@ -162,15 +176,26 @@
 			start: showStartScroll,
 			end: showEndScroll
 		};
+		didReachStart(!showStartScroll);
+		didReachEnd(!showEndScroll);
 	};
 	const onTabsScroll = debounce((e) => {
 		updateNavbtnsState(e.target);
 	});
+	// $: tabRef = tabsRef?.children[activeTab];
+	$: {
+		// it's really weird -_- we don't have useEffect to add isRTL as a dep!
+		// so i put the isRTL and it seems useless just to run the function on direction change"
+		isRTL;
+		const { tabsRects, tabRects } = getTabsRects();
+		scrollSelectedIntoView(tabsRects, tabRects);
+	}
+	console.log(!(!showNavBtns.end && !showNavBtns.start));
 </script>
 
 <div class="sts___tabs___container">
 	{#if !(!showNavBtns.end && !showNavBtns.start)}
-		<div class="sts___nav___btn___container display___md___none">
+		<div class={`sts___nav___btn___container ${hideNavBtnsOnMobile ? 'display___md___none' : ''}`}>
 			{#if isRTL}
 				<button
 					disabled={!showNavBtns.end}
@@ -196,7 +221,7 @@
 		<slot />
 	</div>
 	{#if !(!showNavBtns.end && !showNavBtns.start)}
-		<div class="sts___nav___btn___container display___md___none">
+		<div class={`sts___nav___btn___container ${hideNavBtnsOnMobile ? 'display___md___none' : ''}`}>
 			{#if isRTL}
 				<button
 					disabled={!showNavBtns.start}
@@ -223,6 +248,9 @@
 	.sts___tabs.hide___sts___tabs___scroll {
 		-ms-overflow-style: none;
 		scrollbar-width: none;
+	}
+	.sts___tabs.hide___sts___tabs___scroll::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
 	}
 	.sts___tabs {
 		display: -webkit-flex;

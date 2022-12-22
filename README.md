@@ -49,6 +49,11 @@
 ## installation
 
 ```bash
-# create a new project in the current directory
 npm i svelte-tabs-scroll-tabs
 ```
+
+
+## DEMO
+
+
+

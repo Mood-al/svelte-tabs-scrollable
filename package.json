@@ -27,7 +27,8 @@
 	"funding": "https://www.buymeacoffee.com/Mooder",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "svelte-kit sync",
+		"build": "svelte-kit sync && svelte-package",
+		"preview": "vite preview",
 		"prepublishOnly": "echo 'Did you mean to publish `./package/`, instead of `./`?' && exit 1",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
@@ -38,6 +39,8 @@
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
 		"@sveltejs/package": "^1.0.0-next.1",
+		"@sveltejs/adapter-node": "next",
+		
 		"eslint": "^8.16.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^4.0.0",

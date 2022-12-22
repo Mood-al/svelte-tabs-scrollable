@@ -10,7 +10,7 @@
 	};
 	let activeTab = 13;
 	const onTabClick = (e, index) => {
-		console.log(e, index);
+		console.log(index);
 	};
 	$: {
 		if (typeof window !== 'undefined') {
@@ -20,9 +20,29 @@
 	}
 	let goToEnd;
 	let goToStart;
+
+	const didReachEnd = (val) => {
+		// sets if the tabs reached the end point of the tab's container
+	};
+	const didReachStart = (val) => {
+		// sets if the tabs reached the start point of the tab's container
+	};
 </script>
 
-<Tabs {activeTab} {onTabClick} bind:goToEnd bind:goToStart {isRTL}>
+<!-- I couldn't add comments between the <Tabs/>'s props -_- -->
+<Tabs
+	{activeTab}
+	{onTabClick}
+	bind:goToEnd
+	bind:goToStart
+	{isRTL}
+	{didReachStart}
+	{didReachEnd}
+	scrollSelectedToCenterOfView={true}
+	scrollSelectedToEndOfView={false}
+	animationDuration={300}
+	hideNavBtnsOnMobile={true}
+>
 	{#each [...Array(33).keys()] as item}
 		<Tab>
 			tab {item}

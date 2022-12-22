@@ -1,7 +1,7 @@
 <script>
 </script>
 
-<button class={`sts___tab sts___btn`} on:click={(e) => console.log(e)}>
+<button class={`sts___tab sts___btn`}>
 	<slot />
 </button>
 
