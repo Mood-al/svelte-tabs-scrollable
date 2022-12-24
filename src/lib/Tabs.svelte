@@ -24,7 +24,7 @@
 		scroll(0);
 	};
 
-	export const goToEnd = () => {
+	export const goToEnd = () => { 
 		const { tabsRects } = getTabsRects();
 		const { scrollWidth } = tabsRects;
 		scroll((isRTL ? -1 : 1) * scrollWidth);

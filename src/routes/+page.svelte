@@ -1,33 +1,33 @@
-<script>
-	// @ts-nocheck
+	<script>
+		// @ts-nocheck
 
-	import Tabs from '$lib/Tabs.svelte';
-	import Tab from '$lib/Tab.svelte';
+		import Tabs from '$lib/Tabs.svelte';
+		import Tab from '$lib/Tab.svelte';
 
-	let isRTL = false;
-	const onClick = () => {
-		isRTL = !isRTL;
-	};
-	let activeTab = 13;
-	const onTabClick = (e, index) => {
-		console.log(index);
-	};
-	$: {
-		if (typeof window !== 'undefined') {
-			const body = window.document.body;
-			isRTL ? (body.dir = 'rtl') : (body.dir = 'ltr');
+		let isRTL = false;
+		const onClick = () => {
+			isRTL = !isRTL;
+		};
+		let activeTab = 13;
+		const onTabClick = (e, index) => {
+			console.log(index);
+		};
+		$: {
+			if (typeof window !== 'undefined') {
+				const body = window.document.body;
+				isRTL ? (body.dir = 'rtl') : (body.dir = 'ltr');
+			}
 		}
-	}
-	let goToEnd;
-	let goToStart;
+		let goToEnd;
+		let goToStart;
 
-	const didReachEnd = (val) => {
-		// sets if the tabs reached the end point of the tab's container
-	};
-	const didReachStart = (val) => {
-		// sets if the tabs reached the start point of the tab's container
-	};
-</script>
+		const didReachEnd = (val) => {
+			// sets if the tabs reached the end point of the tab's container
+		};
+		const didReachStart = (val) => {
+			// sets if the tabs reached the start point of the tab's container
+		};
+	</script>
 
 <!-- I couldn't add comments between the <Tabs/>'s props -_- -->
 <Tabs
