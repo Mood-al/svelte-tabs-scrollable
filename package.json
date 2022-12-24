@@ -1,6 +1,6 @@
 {
 	"name": "svelte-tabs-scrollable",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "a simple svelte scrollable tabs with a lot of additional features and with fully supporting of RTL mode",
 	"author": "Mohammed Aliwi",
 	"license": "MIT",
