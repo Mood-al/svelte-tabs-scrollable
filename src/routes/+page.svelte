@@ -42,6 +42,10 @@
 	scrollSelectedToEndOfView={false}
 	animationDuration={300}
 	hideNavBtnsOnMobile={true}
+	showTabsScroll={false}
+	hideNavBtns={false}
+	tabsClassName="ss"
+	tabsContainerClassName="ss"
 >
 	{#each [...Array(33).keys()] as item}
 		<Tab>
