@@ -8,7 +8,7 @@
 
 	export let isRTL = false;
 	export let activeTab;
-	export let onTabClick;
+	export let onTabClick = () => null;
 	export let scrollSelectedToCenterOfView = false;
 	export let scrollSelectedToEndOfView = false;
 	export let tabsScrollAmount = 3;
@@ -24,7 +24,7 @@
 		scroll(0);
 	};
 
-	export const goToEnd = () => { 
+	export const goToEnd = () => {
 		const { tabsRects } = getTabsRects();
 		const { scrollWidth } = tabsRects;
 		scroll((isRTL ? -1 : 1) * scrollWidth);
@@ -36,15 +36,15 @@
 		scroll(tabsRef?.scrollLeft + tabRef?.clientWidth * tabsScrollAmount, animationDuration, true);
 	};
 
+	export let didReachEnd = () => null;
+	export let didReachStart = () => null;
+
 	let tabsRef;
 	let tabRef;
 	let showNavBtns = {
 		start: false,
 		end: false
 	};
-
-	export let didReachEnd;
-	export let didReachStart;
 
 	const scroll = (scrollValue = 100, duration = animationDuration, animation = true) => {
 		if (animation) {

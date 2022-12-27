@@ -1,7 +1,7 @@
 # svelte-tabs-scrollable
 
 > A simple svelte scrollable tabs with a lot of additional features and with fully supporting of RTL mode
-> This package is the Svelte version of react-tabs-scrollable package!!
+> This package is the Svelte version of <a href="https://www.npmjs.com/package/react-tabs-scrollable" target="_blank" rel="noopener"><span>react-tabs-scrollable</span> </a> package!!
 
 [![NPM](https://img.shields.io/npm/v/svelte-tabs-scrollable.svg)](https://www.npmjs.com/package/svelte-tabs-scrollable) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -14,9 +14,7 @@ yarn add svelte-tabs-scrollable
 
 ## Demo
 
-> the demo isn't ready yet, but you cant see the react version demo of it
-
-### <a href="https://react-tabs-scrollable.vercel.app" target="_blank" rel="noopener"><span>Demo</span> </a>
+### <a href="https://svelte-tabs-scrollable.vercel.app" target="_blank" rel="noopener"><span>Demo</span> </a>
 
 ## Features
 
@@ -24,26 +22,44 @@ yarn add svelte-tabs-scrollable
 - Easy to start with it takes you less than minute to start it up!
 - It has many features and so easy to customize
 - Fully support for RTL (actually the reason why I built this component is because RTL)
-<!-- - Fully accessible -->
 - You can control in literally everything inside it
-<!-- - Small size 8k and 3.1k gzipped -->
 - Great to use in navigation , menus and lists or any proper use for tabs
 - Easy to style , you have the css file so you can edit it as you would like
 - And much more ..
 
 ## Usage
 
-> Soon
-
-<!--
 ```jsx
-
 
 <script>
 
 
-	import Tabs from 'svelte-tabs-scrollabel';
-	import Tab from '$lib/Tab.svelte';
+import Tabs from 'svelte-tabs-scrollable/Tabs.svelte';
+import Tab from 'svelte-tabs-scrollable/Tab.svelte';
+
+// define the initail state of the active tab to start with
+let activeTab = 10;
+
+</script>
+<Tabs {activeTab} >
+	{#each [...Array(33).keys()] as item}
+		<Tab>
+			tab {item}
+		</Tab>
+	{/each}
+</Tabs>
+
+```
+
+## Advanced example
+
+```jsx
+
+<script>
+	// @ts-nocheck
+
+	import Tabs from 'svelte-tabs-scrollable/Tabs.svelte';
+	import Tab from 'svelte-tabs-scrollable/Tab.svelte';
 
 	let isRTL = false;
 	const onClick = () => {
@@ -61,7 +77,8 @@ yarn add svelte-tabs-scrollable
 	}
 	let goToEnd;
 	let goToStart;
-
+	let showTabsScroll = false;
+	let hideNavBtns = false;
 	const didReachEnd = (val) => {
 		// sets if the tabs reached the end point of the tab's container
 	};
@@ -69,6 +86,8 @@ yarn add svelte-tabs-scrollable
 		// sets if the tabs reached the start point of the tab's container
 	};
 </script>
+
+<!-- I couldn't add comments between the <Tabs/>'s props -_- -->
 <Tabs
 	{activeTab}
 	{onTabClick}
@@ -77,97 +96,44 @@ yarn add svelte-tabs-scrollable
 	{isRTL}
 	{didReachStart}
 	{didReachEnd}
-	scrollSelectedToCenterOfView={true}
+	scrollSelectedToCenterOfView={false}
 	scrollSelectedToEndOfView={false}
 	animationDuration={300}
 	hideNavBtnsOnMobile={true}
-	showTabsScroll={false}
-	hideNavBtns={false}
+	{showTabsScroll}
+	{hideNavBtns}
 	tabsClassName="ss"
 	tabsContainerClassName="ss"
 >
 	{#each [...Array(33).keys()] as item}
-		<Tab>
-			tab {item}
-		</Tab>
+          <Tab
+            as="a"
+            asProps={{
+                href: '/#',
+                ['data-item']: item
+            }}
+            tabClassName="custom-class">
+            tab {item}
+         </Tab>
 	{/each}
 </Tabs>
 
+<button on:click={() => goToEnd()}>go to end</button>
+<button on:click={() => goToStart()}>go to start</button>
+<button on:click={onClick}>{isRTL ? 'RTL' : 'LTR'}</button>
+<div style="border : 1px solid #000; display: inline-block">
+	<input bind:checked={showTabsScroll} type="checkbox" id="showTabsScroll" />
+	<label for="showTabsScroll"> showTabsScroll : {showTabsScroll} </label>
+</div>
+<div style="border : 1px solid #000; display: inline-block">
+	<input bind:checked={hideNavBtns} type="checkbox" id="hideNavBtns" />
+	<label for="hideNavBtns"> hideNavBtns : {hideNavBtns}</label>
+</div>
 ```
 
-### Full example with all features
+> You can see the full examples in the <a href="https://svelte-tabs-scrollable.vercel.app/demos" target="_blank" rel="noopener"><span>demos</span></a>'s page
 
-```jsx
-<Tabs
-	// the selected tab state which must be passed to the commponent
-	activeTab={activeTab}
-	// tab on click function
-	// it has two props
-	// first one is event object
-	// second one is the index of the selected tab
-	onTabClick={(val) => console.log(val)}
-	// this prop returns a group of events to control the tabs such as onLeftBtnClick , onRightBtnClick to control the tabs
-	// you should pass here a ref to get the required functionality
-	action={tabRef}
-	// sets if the direction of the page is RTL or not
-	// default false
-	isRTL={false}
-	// sets if the tabs reached the end point of the tab container
-	// function
-	didReachEnd={(val) => console.log(val)}
-	// sets if the tabs reached the start point container
-	// function
-	didReachStart={(val) => console.log(val)}
-	// sets how many tabs you want to scroll on every move
-	// default 3 tabs on each navigation button click
-	tabsScrollAmount={3}
-	// sets the general animation duration when you click on the navigation buttons and when you click out the tabs view
-	// this option will disable navBtnCLickAnimationDuration and selectedAnimationDuration
-	// default 300s
-	animationDuration={300}
-	// sets the animation of the scroll when you click on the navigation buttons
-	// note : this will overwirte the animationDuration value
-	// default 300s
-	navBtnCLickAnimationDuration={300}
-	// sets the animation of the scroll when you click on a tab that is out of the view
-	// note : this will overwirte the animationDuration value
-	// default 300s
-	selectedAnimationDuration={300}
-	// sets the right navitgation vutton icon
-	// default feather arrow-right svg icon
-	// you can pass jsx here or just a string
-	rightBtnIcon={'>'}
-	// sets the left navitgation button icon
-	// default feather arrow-left svg icon
-	// you can pass jsx here or just a string
-	leftBtnIcon={'<'}
-	//hides the navigantion button
-	// default false
-	hideNavBtns={false}
-	// hides the navigation buttons on mobile devices
-	// default true
-	hideNavBtnsOnMobile={true}
-	// shows the scroll of the tabs
-	// default false
-	showTabsScroll={false}
-	// sets the color of navigation buttons if you dont want to use your own
-	// it just changes the stroke color of the svg icon
-	// you cant use this option if you used your own btns
-	// or you can customize it using css
-	navBtnsIconColor={'HEX'}
-	// gets the coordinates of the selected tab
-	// returns object of the width and the scrollLeft of the selected tab
-	// be careful when you use state with this function it will be triggered on every scroll movement and when the app rerenders
-	selectedTabCoordinates={(val) => console.log(val)}
->
-	<Tab>item </Tab>
-	{[...Array(20).keys()].map((tab) => (
-		<Tab key={tab}>Tab {tab}</Tab>
-	))}
-</Tabs>
-``` -->
-
-## API
+## Tabs' API
 
 <table>
     <tr>
@@ -302,17 +268,67 @@ yarn add svelte-tabs-scrollable
         <td><code>scrollSelectedToCenterOfView</code></td>
         <td>false</td>
         <td> boolean</td>
-        <td> scroll the selected tab to the center of the view </td>
+        <td> scroll the selected tab to the center of the view.
+        I will add examples about it in the demos' page
+        </td>
     </tr>
 	 </tr>
         <tr>
         <td><code>scrollSelectedToEndOfView</code></td>
         <td>false</td>
         <td> boolean</td>
-        <td>  scroll the selected tab to the end of the view </td>
+        <td>  scroll the selected tab to the end of the view.  I will add examples about it in the demos' page </td>
     </tr>
 </table>
 
+## Tab's API
+
+<table>
+    <tr>
+        <td>Name</td>
+        <td>Default</td>
+        <td>Type</td>
+        <td>Description</td>
+    </tr>
+     </tr>
+        <tr>
+        <td><code>as</code></td>
+        <td>button</td>
+        <td> string</td>
+        <td>  You can change the HTML element of the 
+<code>
+    Tab
+</code> 's component by passing <code>as="a"</code>.
+this becomes handy if u wanted to use anchor with href or any custom element.
+
+> Note : if u want to pass props or attribute to the html element u must use <code>asProps</code> prop
+
+</td>
+    </tr>
+     </tr>
+        <tr>
+        <td><code>asProps</code></td>
+        <td>-</td>
+        <td> object</td>
+        <td> You can pass attributes to the element u passed with <code>as</code> prop.
+        For example if you want <code>as="a"</code> and u want to pass <code>href</code> as an attribute.
+        you can use <code>asProps</code> like so <code>asProps={{
+				href: '/#',
+			}}</code>.
+<br />
+<br />
+
+> Note : this prop uses <code><svelte:element {...asProps} /></code> inisde so basically you can pass anything as prop to it!
+
+</td>
+    </tr>
+      <tr>
+        <td><code>tabClassName</code></td>
+        <td><code>sts___tab sts___btn</code></td>
+        <td>string</td>
+        <td>you can pass a custom class to the <code>Tab</code> component</td>
+    </tr>
+    </table>
 <br />
 
 > you can see all the examples in the <a href="https://react-tabs-scrollable.vercel.app" target="_blank" rel="noopener"><span>Demo</span> </a>
