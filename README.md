@@ -18,7 +18,7 @@ yarn add svelte-tabs-scrollable
 
 ## Features
 
-- This package is the svelte version of react-tabs-scrollable package!!
+- This package is the svelte version of <code>react-tabs-scrollable </code> package!!
 - Easy to start with it takes you less than minute to start it up!
 - It has many features and so easy to customize
 - Fully support for RTL (actually the reason why I built this component is because RTL)
@@ -175,13 +175,13 @@ let activeTab = 10;
         <td><code>tabsContainerClassName</code></td>
         <td>-</td>
         <td> string</td>
-        <td> adds a css class of the tabs' container </td>
+        <td> adds a css class for the tabs' container </td>
     </tr>
 	 <tr>
         <td><code>tabsClassName</code></td>
         <td>-</td>
         <td> string</td>
-        <td>adds a css class of the tabs </td>
+        <td>adds a css class for the tabs </td>
     </tr>
 	 <tr>
         <td><code>goToStart</code></td>
@@ -331,9 +331,7 @@ this becomes handy if u wanted to use anchor with href or any custom element.
     </table>
 <br />
 
-> you can see all the examples in the <a href="https://react-tabs-scrollable.vercel.app" target="_blank" rel="noopener"><span>Demo</span> </a>
-
-> Please let me see your reviews and if there're any features you want me to add to them
+> Please let me see your reviews and if there're any features you want me to add them to the project!
 
 > Dont forget to star the project on GITHUB 0_0
 
