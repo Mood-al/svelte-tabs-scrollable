@@ -6,11 +6,11 @@
 </script>
 
 {#if as}
-	<svelte:element this={as} {...asProps} class={tabClasses}>
+	<svelte:element this={as} role="tab" {...asProps} class={tabClasses}>
 		<slot />
 	</svelte:element>
 {:else}
-	<button class={tabClasses}>
+	<button role="tab" aria-selected="false" tabindex="-1" class={tabClasses}>
 		<slot />
 	</button>
 {/if}

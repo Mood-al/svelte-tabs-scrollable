@@ -1,10 +1,11 @@
 <script>
 	import animate from './utils/animate';
 	import { getNormalizedScrollLeft } from '$lib/utils/getNormalizedScrollLeft';
-	import { onMount } from 'svelte/internal';
+	import { onMount, beforeUpdate, afterUpdate } from 'svelte/internal';
 	import { debounce } from './utils/debounce';
 	import LeftArrowBtn from './LeftArrowBtn.svelte';
 	import RightArrowBtn from './RightArrowBtn.svelte';
+	import ownerDocument from './utils/ownerDocument';
 
 	export let isRTL = false;
 	export let activeTab;
@@ -44,6 +45,57 @@
 	let showNavBtns = {
 		start: false,
 		end: false
+	};
+
+	const nextItem = (list, item) => {
+		if (list === item) {
+			return list.firstElementChild;
+		}
+
+		if (item && item.nextElementSibling) {
+			return item.nextElementSibling;
+		}
+
+		return list.firstElementChild;
+	};
+
+	const previousItem = (list, item) => {
+		if (list === item) {
+			return list.lastElementChild;
+		}
+
+		if (item && item.previousElementSibling) {
+			return item.previousElementSibling;
+		}
+
+		return list.lastElementChild;
+	};
+
+	const moveFocus = (list, currentFocus, traversalFunction) => {
+		let wrappedOnce = false;
+
+		let nextFocus = traversalFunction(list, currentFocus);
+
+		while (nextFocus) {
+			if (nextFocus === list.firstChild) {
+				if (wrappedOnce) {
+					return;
+				}
+
+				wrappedOnce = true;
+			}
+
+			const nextFocusDisabled =
+				nextFocus.disabled || nextFocus.getAttribute('aria-disabled') === 'true';
+
+			if (!nextFocus.hasAttribute('tabindex') || nextFocusDisabled) {
+				// Move to the next element.
+				nextFocus = traversalFunction(list, nextFocus);
+			} else {
+				nextFocus.focus();
+				return;
+			}
+		}
 	};
 
 	const scroll = (scrollValue = 100, duration = animationDuration, animation = true) => {
@@ -102,8 +154,14 @@
 				activeTab = idx;
 
 				if (activeTab === idx) {
-					[...el.children].forEach((tab) => tab.classList.remove('sts___tab___selected'));
+					[...el.children].forEach((tab) => {
+						tab.classList.remove('sts___tab___selected');
+						tab.setAttribute('tabindex', '-1');
+						tab.setAttribute('aria-selected', 'false');
+					});
 					e.target.classList.add('sts___tab___selected');
+					e.target.setAttribute('tabindex', '0');
+					e.target.setAttribute('aria-selected', 'true');
 				}
 
 				if (e.target.classList.contains('sts___tab___selected')) {
@@ -176,7 +234,6 @@
 		const scrollWidth = tabsElement.scrollWidth;
 		const clientWidth = tabsElement.clientWidth;
 		const showStartScroll = Math.floor(scrollLeft.toFixed(2)) > 1;
-
 		const showEndScroll = Math.ceil(scrollLeft.toFixed(2)) < scrollWidth - clientWidth - 1;
 
 		showNavBtns = {
@@ -186,9 +243,55 @@
 		didReachStart(!showStartScroll);
 		didReachEnd(!showEndScroll);
 	};
+
 	const onTabsScroll = debounce((e) => {
 		updateNavbtnsState(e.target);
 	});
+
+	const onTabsKeyDown = (event) => {
+		const list = tabsRef;
+		const currentFocus = ownerDocument(list).activeElement;
+
+		const role = currentFocus.getAttribute('role');
+
+		if (role !== 'tab') {
+			return;
+		}
+
+		let previousItemKey = 'ArrowLeft';
+		let nextItemKey = 'ArrowRight';
+
+		if (isRTL) {
+			// swap previousItemKey with nextItemKey
+			previousItemKey = 'ArrowRight';
+			nextItemKey = 'ArrowLeft';
+		}
+
+		switch (event.key) {
+			case previousItemKey:
+				event.preventDefault();
+				moveFocus(list, currentFocus, previousItem);
+				break;
+
+			case nextItemKey:
+				event.preventDefault();
+				moveFocus(list, currentFocus, nextItem);
+				break;
+
+			case 'Home':
+				event.preventDefault();
+				moveFocus(list, null, nextItem);
+				break;
+
+			case 'End':
+				event.preventDefault();
+				moveFocus(list, null, previousItem);
+				break;
+
+			default:
+				break;
+		}
+	};
 
 	$: {
 		// it's really weird -_- we don't have useEffect to add isRTL as a dep!
@@ -215,6 +318,9 @@
 		use:handleTabsAction
 		bind:this={tabsRef}
 		on:scroll={onTabsScroll}
+		on:keydown={onTabsKeyDown}
+		role="tablist"
+		aria-label="tabs"
 	>
 		<slot />
 	</div>
@@ -230,9 +336,6 @@
 </div>
 
 <style>
-	/* created at 5:39 AM at 11/04/2022*/
-	/* react tabs scrollable */
-
 	:global(:root) {
 		--sts-primary-color: #fd9e02;
 		--sts-gray-color: #ddd;
@@ -340,7 +443,7 @@
 		background-color: var(--sts-primary-color);
 		transition: 0.5s all;
 	}
-	:global(.sts___nav___btn :hover > svg) {
+	:global(.sts___nav___btn:hover > svg) {
 		stroke: var(--sts-white-color);
 	}
 	@media (max-width: 767.98px) {

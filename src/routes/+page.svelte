@@ -49,14 +49,7 @@
 	tabsContainerClassName="ss"
 >
 	{#each [...Array(33).keys()] as item}
-		<Tab
-			as="a"
-			asProps={{
-				href: '/#',
-				['data-item']: item
-			}}
-			tabClassName="dd"
-		>
+		<Tab>
 			tab {item}
 		</Tab>
 	{/each}
