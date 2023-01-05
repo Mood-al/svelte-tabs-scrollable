@@ -24,7 +24,6 @@ yarn add svelte-tabs-scrollable
 - Fully support for RTL (actually the reason why I built this component is because RTL)
 - You can control in literally everything inside it
 - Great to use in navigation , menus and lists or any proper use for tabs
-- Easy to style , you have the css file so you can edit it as you would like
 - And much more ..
 
 ## Usage

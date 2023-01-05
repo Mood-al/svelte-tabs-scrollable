@@ -1,7 +1,6 @@
 <script>
 	import animate from './utils/animate';
 	import { getNormalizedScrollLeft } from '$lib/utils/getNormalizedScrollLeft';
-	import { onMount, beforeUpdate, afterUpdate } from 'svelte/internal';
 	import { debounce } from './utils/debounce';
 	import LeftArrowBtn from './LeftArrowBtn.svelte';
 	import RightArrowBtn from './RightArrowBtn.svelte';
@@ -190,27 +189,40 @@
 		}
 	};
 
-	onMount(() => {
-		const { tabsRects, tabRects } = getTabsRects();
+	// onMount(() => {
+	// 	const { tabsRects, tabRects } = getTabsRects();
 
-		updateNavbtnsState(tabsRef);
-		scrollSelectedIntoView(tabsRects, tabRects);
-	});
+	// 	updateNavbtnsState(tabsRef);
+	// 	scrollSelectedIntoView(tabsRects, tabRects);
+	// });
 
-	onMount(() => {
-		const resizeObserver = new ResizeObserver((entries) => {
-			const { tabsRects, tabRects } = getTabsRects();
+	// onMount(() => {
+	// 	const resizeObserver = new ResizeObserver((entries) => {
+	// 		const { tabsRects, tabRects } = getTabsRects();
 
-			updateNavbtnsState(tabsRef);
-			scrollSelectedIntoView(tabsRects, tabRects);
-		});
+	// 		updateNavbtnsState(tabsRef);
+	// 		scrollSelectedIntoView(tabsRects, tabRects);
+	// 	});
 
-		resizeObserver.observe(tabsRef);
+	// 	resizeObserver.observe(tabsRef);
 
-		// This callback cleans up the observer
-		return () => resizeObserver.unobserve(tabsRef);
-	});
+	// 	// This callback cleans up the observer
+	// 	return () => resizeObserver.unobserve(tabsRef);
+	// });
+	$: {
+		// it's really weird -_- we don't have useEffect to add isRTL as a dep!
+		// so i put the isRTL and it seems useless just to run the function on direction change"
+		isRTL;
+		if (typeof window !== 'undefined' && tabsRef) {
+			const resizeObserver = new ResizeObserver((entries) => {
+				const { tabsRects, tabRects } = getTabsRects();
+				updateNavbtnsState(tabsRef);
+				scrollSelectedIntoView(tabsRects, tabRects);
+			});
 
+			resizeObserver.observe(tabsRef);
+		}
+	}
 	const scrollSelectedIntoView = (tabsRects, tabRects, additionalScrollValue = 0) => {
 		if (tabRects && tabRects) {
 			if (tabRects.left < tabsRects.left) {
@@ -230,6 +242,7 @@
 	};
 
 	const updateNavbtnsState = (tabsElement) => {
+		if (!tabsElement) return;
 		const scrollLeft = getNormalizedScrollLeft(tabsElement, isRTL ? 'rtl' : 'ltr');
 		const scrollWidth = tabsElement.scrollWidth;
 		const clientWidth = tabsElement.clientWidth;
@@ -292,14 +305,6 @@
 				break;
 		}
 	};
-
-	$: {
-		// it's really weird -_- we don't have useEffect to add isRTL as a dep!
-		// so i put the isRTL and it seems useless just to run the function on direction change"
-		isRTL;
-		const { tabsRects, tabRects } = getTabsRects();
-		scrollSelectedIntoView(tabsRects, tabRects);
-	}
 </script>
 
 <div class={`sts___tabs___container ${tabsContainerClassName}`}>
