@@ -5,6 +5,7 @@
 	import LeftArrowBtn from './LeftArrowBtn.svelte';
 	import RightArrowBtn from './RightArrowBtn.svelte';
 	import ownerDocument from './utils/ownerDocument';
+	import { onMount } from 'svelte';
 
 	export let isRTL = false;
 	export let activeTab;
@@ -189,12 +190,12 @@
 		}
 	};
 
-	// onMount(() => {
-	// 	const { tabsRects, tabRects } = getTabsRects();
+	onMount(() => {
+		// const { tabsRects, tabRects } = getTabsRects();
 
-	// 	updateNavbtnsState(tabsRef);
-	// 	scrollSelectedIntoView(tabsRects, tabRects);
-	// });
+		updateNavbtnsState(tabsRef);
+		// scrollSelectedIntoView(tabsRects, tabRects);
+	});
 
 	// onMount(() => {
 	// 	const resizeObserver = new ResizeObserver((entries) => {
@@ -209,6 +210,7 @@
 	// 	// This callback cleans up the observer
 	// 	return () => resizeObserver.unobserve(tabsRef);
 	// });
+
 	$: {
 		// it's really weird -_- we don't have useEffect to add isRTL as a dep!
 		// so i put the isRTL and it seems useless just to run the function on direction change"

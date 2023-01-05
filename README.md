@@ -182,6 +182,18 @@ let activeTab = 10;
         <td> string</td>
         <td>adds a css class for the tabs </td>
     </tr>
+    	 <tr>
+        <td><code>onLeftBtnClick</code></td>
+        <td>-</td>
+        <td> function </td>
+        <td>  <code>onLeftBtnClick</code> : a function that scrolls the tabs to the left. to use it you must bind it with the <Tabs /> component like so <code> bind:onLeftBtnClick </code> </code> </td>
+    </tr>
+    	<tr>
+        <td><code>onRightBtnClick</code></td>
+        <td>-</td>
+        <td> function </td>
+        <td>  <code>onRightBtnClick</code> : a function that scrolls the tabs to the right. to use it you must bind it with the <Tabs /> component like so <code> bind:onRightBtnClick </code> </code> </td>
+    </tr>
 	 <tr>
         <td><code>goToStart</code></td>
         <td>-</td>

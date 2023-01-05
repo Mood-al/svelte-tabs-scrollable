@@ -8,7 +8,7 @@
 	const onClick = () => {
 		isRTL = !isRTL;
 	};
-	let activeTab = 13;
+	let activeTab = 22;
 	const onTabClick = (e, index) => {
 		console.log(index);
 	};
@@ -39,7 +39,7 @@
 	{isRTL}
 	{didReachStart}
 	{didReachEnd}
-	scrollSelectedToCenterOfView={true}
+	scrollSelectedToCenterOfView={false}
 	scrollSelectedToEndOfView={false}
 	animationDuration={300}
 	hideNavBtnsOnMobile={false}
