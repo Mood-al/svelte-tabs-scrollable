@@ -225,6 +225,22 @@
 			resizeObserver.observe(tabsRef);
 		}
 	}
+	onMount(() => {
+		if (!tabRef) return;
+		// make sure to move the selected tab into view on css / fonts shifts that might take some time due to network connections
+		const tabObserver = new ResizeObserver((entries) => {
+			const { tabsRects, tabRects } = getTabsRects();
+			scrollSelectedIntoView(tabsRects, tabRects);
+		});
+
+		tabObserver.observe(tabRef);
+		return {
+			destroy() {
+				resizeObserver.unobserve(tabRef);
+			}
+		};
+	});
+
 	const scrollSelectedIntoView = (tabsRects, tabRects, additionalScrollValue = 0) => {
 		if (tabRects && tabRects) {
 			if (tabRects.left < tabsRects.left) {
